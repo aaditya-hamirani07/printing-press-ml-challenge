@@ -153,7 +153,7 @@ export default function MissionBriefingModal({ isOpen, onClose }: MissionBriefin
               <div className="p-2.5 rounded bg-[#c5a059]/10 border border-[#c5a059]/30">
                 <div className="text-[9.5px] font-mono font-semibold text-[#c5a059] uppercase">Stage 03</div>
                 <div className="font-medium text-[#c5a059] mt-0.5">Vault Breach</div>
-                <p className="text-[11px] text-neutral-300 mt-0.5">Train regression model to clear 1,000 pts.</p>
+                <p className="text-[11px] text-neutral-300 mt-0.5">Train regression model to clear 10 pts.</p>
               </div>
             </div>
           </div>

@@ -29,7 +29,7 @@ export default function VaultSuccessModal({
   if (!isOpen) return null;
 
   const points = validation.points ?? 0;
-  const isTopTier = points >= 950;
+  const isTopTier = points >= 9;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 overflow-y-auto animate-vault-open">
@@ -77,7 +77,7 @@ export default function VaultSuccessModal({
                 BOUNTY POINTS
               </span>
               <span className="text-xl font-bold text-[#c5a059] mt-0.5">
-                {points} <span className="text-xs text-neutral-500 font-normal">/ 1000</span>
+                {points} <span className="text-xs text-neutral-500 font-normal">/ {validation.maxPoints ?? 10}</span>
               </span>
             </div>
 
@@ -102,7 +102,7 @@ export default function VaultSuccessModal({
             <p className="text-xs text-neutral-300 leading-relaxed italic">
               {isTopTier
                 ? "“Brilliant execution. Not even the Governor of the Bank could predict numbers with this precision. Pack the bags — we have what we came for.”"
-                : "“The vault door is open and the operation is a success! You can continue refining your feature engineering and hyperparameters to reach the highest 1,000 pt benchmark.”"}
+                : "“The vault door is open and the operation is a success! You can continue refining your feature engineering and hyperparameters to reach the highest 10 pt benchmark.”"}
             </p>
           </div>
 

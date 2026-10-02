@@ -44,13 +44,13 @@ async function loadAnswerKey(): Promise<{ id: string; amount_printed: number }[]
 }
 
 function calculatePoints(errPct: number): number {
-  if (errPct <= 2.0)  return 1000;
-  if (errPct <= 5.0)  return 950;
-  if (errPct <= 10.0) return 850;
-  if (errPct <= 15.0) return 750;
-  if (errPct <= 20.0) return 600;
-  if (errPct <= 30.0) return 400;
-  if (errPct <= 50.0) return 200;
+  if (errPct <= 2.0)  return 10;
+  if (errPct <= 5.0)  return 9;
+  if (errPct <= 10.0) return 8;
+  if (errPct <= 15.0) return 7;
+  if (errPct <= 20.0) return 6;
+  if (errPct <= 30.0) return 4;
+  if (errPct <= 50.0) return 2;
   return 0;
 }
 
@@ -358,10 +358,10 @@ print("\\n__PP_VAL__:" + json.dumps(_pp_val_payload))
       const points = calculatePoints(errorPct);
 
       const hints: string[] = [];
-      if (points >= 950) {
+      if (points >= 9) {
         hints.push("🏆 Excellent accuracy! Your model achieves top tier benchmark ranking.");
         hints.push("Try fine-tuning learning rates or testing ensemble voting to push error even lower.");
-      } else if (points >= 750) {
+      } else if (points >= 7) {
         hints.push("🎯 Solid model performance! Good generalization on unseen test data.");
         hints.push("Tip: Try tuning hyperparameters (e.g., max_iter, learning_rate) or tree depth in HistGradientBoostingRegressor / RandomForest.");
       } else {
@@ -371,10 +371,10 @@ print("\\n__PP_VAL__:" + json.dumps(_pp_val_payload))
 
       validation = {
         status: "passed",
-        title: points >= 950 ? "Outstanding Accuracy!" : points >= 750 ? "Validation Passed!" : "Model Graded",
-        message: `Evaluation complete: ${errorPct.toFixed(2)}% test validation error (${points} / 1000 pts).`,
+        title: points >= 9 ? "Outstanding Accuracy!" : points >= 7 ? "Validation Passed!" : "Model Graded",
+        message: `Evaluation complete: ${errorPct.toFixed(2)}% test validation error (${points} / 10 pts).`,
         points,
-        maxPoints: 1000,
+        maxPoints: 10,
         errorPct: parseFloat(errorPct.toFixed(2)),
         hints,
         checks: [

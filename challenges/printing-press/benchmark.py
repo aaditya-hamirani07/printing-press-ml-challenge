@@ -165,7 +165,7 @@ def main():
     print(header)
     print("-" * 64)
     for r in results:
-        print(f"{r['Model']:<25}{r['Val R²']:<17.4f}{r['Test Error %']:<16.2f}{r['Points']}/1000")
+        print(f"{r['Model']:<25}{r['Val R²']:<17.4f}{r['Test Error %']:<16.2f}{r['Points']}/10")
     print("=" * 60 + "\n")
 
     # Additional diagnostic details
@@ -174,7 +174,7 @@ def main():
     for r in results:
         print(f"{r['Model']}:")
         print(f"  Val RMSE: {r['Val RMSE']:,.2f} | Val MAE: {r['Val MAE']:,.2f} | Val R²: {r['Val R²']:.4f}")
-        print(f"  Test Overall Error: {r['Test Error %']:.2f}% -> Official Points: {r['Points']}/1000")
+        print(f"  Test Overall Error: {r['Test Error %']:.2f}% -> Official Points: {r['Points']}/10")
 
     # Min / max error summary
     errors = [r["Test Error %"] for r in results]

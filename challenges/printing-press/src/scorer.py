@@ -2,20 +2,20 @@
 
 This module provides the official scoring functionality for the Printing Press ML
 competition. It evaluates participant submissions against the private answer key
-using the overall percentage error metric and assigns points out of 1000.
+using the overall percentage error metric and assigns points out of 10.
 
 Formula:
     overall_error_percentage = (SUM(abs(predicted_amount - actual_amount))
                                 / SUM(actual_amount)) * 100
 
 Points Scale:
-    0–2%    (error <= 2.0)        -> 1000 points
-    >2–5%   (2.0 < error <= 5.0)  -> 950 points
-    >5–10%  (5.0 < error <= 10.0) -> 850 points
-    >10–15% (10.0 < error <= 15.0)-> 750 points
-    >15–20% (15.0 < error <= 20.0)-> 600 points
-    >20–30% (20.0 < error <= 30.0)-> 400 points
-    >30–50% (30.0 < error <= 50.0)-> 200 points
+    0–2%    (error <= 2.0)        -> 10 points
+    >2–5%   (2.0 < error <= 5.0)  -> 9 points
+    >5–10%  (5.0 < error <= 10.0) -> 8 points
+    >10–15% (10.0 < error <= 15.0)-> 7 points
+    >15–20% (15.0 < error <= 20.0)-> 6 points
+    >20–30% (20.0 < error <= 30.0)-> 4 points
+    >30–50% (30.0 < error <= 50.0)-> 2 points
     >50%    (error > 50.0)        -> 0 points
 """
 
@@ -30,7 +30,7 @@ import numpy as np
 import pandas as pd
 
 
-MAX_SCORE = 1000
+MAX_SCORE = 10
 DEFAULT_ANSWER_KEY_PATH = os.path.join("data", "answer_key.csv")
 REQUIRED_SUBMISSION_COLUMNS = ["id", "predicted_amount"]
 ACTUAL_TARGET_COLUMN = "amount_printed"
@@ -42,17 +42,17 @@ class SubmissionValidationError(ValueError):
 
 
 def calculate_points(overall_error_pct: float) -> int:
-    """Map overall percentage error to competition points out of 1000.
+    """Map overall percentage error to competition points out of 10.
 
     Exact Boundary Behavior:
-    - error <= 2%         -> 1000
-    - error > 2% and <= 5% -> 950
-    - error > 5% and <= 10%-> 850
-    - error > 10% and <= 15%-> 750
-    - error > 15% and <= 20%-> 600
-    - error > 20% and <= 30%-> 400
-    - error > 30% and <= 50%-> 200
-    - error > 50%         -> 0
+    - error <= 2%          -> 10
+    - error > 2% and <= 5% -> 9
+    - error > 5% and <= 10%-> 8
+    - error > 10% and <= 15%-> 7
+    - error > 15% and <= 20%-> 6
+    - error > 20% and <= 30%-> 4
+    - error > 30% and <= 50%-> 2
+    - error > 50%          -> 0
 
     Parameters
     ----------
@@ -62,25 +62,25 @@ def calculate_points(overall_error_pct: float) -> int:
     Returns
     -------
     int
-        Score from 0 to 1000.
+        Score from 0 to 10.
     """
     if overall_error_pct < 0.0:
         raise ValueError(f"Error percentage cannot be negative: {overall_error_pct}")
 
     if overall_error_pct <= 2.0:
-        return 1000
+        return 10
     elif overall_error_pct <= 5.0:
-        return 950
+        return 9
     elif overall_error_pct <= 10.0:
-        return 850
+        return 8
     elif overall_error_pct <= 15.0:
-        return 750
+        return 7
     elif overall_error_pct <= 20.0:
-        return 600
+        return 6
     elif overall_error_pct <= 30.0:
-        return 400
+        return 4
     elif overall_error_pct <= 50.0:
-        return 200
+        return 2
     else:
         return 0
 

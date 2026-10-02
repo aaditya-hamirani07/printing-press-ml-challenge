@@ -229,7 +229,7 @@ export default function OutputPanel({
                   <span className="text-sm font-bold text-[#c5a059]">
                     {result.validation.points}
                   </span>
-                  <span className="text-[9.5px] text-neutral-400 font-mono">/ 1000 pts</span>
+                  <span className="text-[9.5px] text-neutral-400 font-mono">/ {result.validation.maxPoints ?? 10} pts</span>
                 </div>
               )}
             </div>

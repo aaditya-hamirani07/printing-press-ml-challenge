@@ -142,7 +142,7 @@ export default function Home() {
                 </h2>
               </div>
             </div>
-            <span className="stamp-gold">1000 PTS</span>
+            <span className="stamp-gold">10 PTS</span>
           </div>
 
           <p className="text-xs text-neutral-400 leading-relaxed">
