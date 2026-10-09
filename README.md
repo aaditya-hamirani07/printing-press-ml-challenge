@@ -260,28 +260,19 @@ Open [`http://localhost:3000/printing-press`](http://localhost:3000/printing-pre
 
 ## 🧪 Running Unit Tests & Benchmarks
 
-### 1. Scorer Unit Tests
-
-Run the official unit test suite to verify scoring boundaries and submission validation:
+Run the official scoring unit tests:
 
 ```bash
 python -m unittest challenges/printing-press/tests/test_scorer.py
 ```
 
-### 2. Model Benchmark Suite
-
-Run the benchmark suite to evaluate baseline model performance:
+Run the model difficulty benchmark:
 
 ```bash
 python challenges/printing-press/benchmark.py
 ```
 
-- **With Answer Key Present**: Evaluates both the 20% validation split and the official 1,500-sample test set.
-- **Validation-Only Fallback**: Automatically evaluates on the 80/20 train/validation split when the evaluation key is excluded.
-
-### 3. CLI Submission Scorer
-
-Score a participant submission CSV against an answer key via command line:
+Score a submission file via CLI:
 
 ```bash
 python challenges/printing-press/src/scorer.py submission.csv --answer-key challenges/printing-press/data/answer_key.csv
@@ -291,17 +282,8 @@ python challenges/printing-press/src/scorer.py submission.csv --answer-key chall
 
 ## 🔒 Security & Answer-Key Privacy
 
-- 🛡️ **Dataset Isolation**: [`server/workspace.js`](server/workspace.js) pre-seeds only `train.csv` and `test.csv` into contestant workspace directories. Evaluation answer keys are never exposed or copied to client workspaces.
-- 🔐 **Server-Side Evaluation**: All test prediction scoring occurs in the backend execution pipeline or via private cloud storage in production.
-- ⏱️ **Resource Sandboxing**: Python execution is governed by a 5-minute timeout, CPU thread caps (`SANDBOX_THREAD_CAP=4`), 2MB output limits, and sanitized environment variables.
+- 🛡️ **Dataset Isolation**: [`server/workspace.js`](server/workspace.js) copies only `train.csv` and `test.csv` into contestant workspaces; `answer_key.csv` is never exposed or copied to client directories.
+- 🔐 **Server-Side Evaluation**: Test set prediction scoring executes exclusively on the backend server or via private storage in production.
+- ⏱️ **Resource Sandboxing**: Execution is bounded by a 5-minute timeout, CPU thread caps (`SANDBOX_THREAD_CAP=4`), and a 2MB output buffer limit.
 
 ---
-
-## 🔗 Links & References
-
-- **Standalone Challenge Repository**: [github.com/aaditya-hamirani07/Printing_Press_ML](https://github.com/aaditya-hamirani07/Printing_Press_ML)
-- **Platform Repository**: [github.com/aaditya-hamirani07/Online_IDE](https://github.com/aaditya-hamirani07/Online_IDE)
-- **Dataset Generation Engine**: [`challenges/printing-press/generator.py`](challenges/printing-press/generator.py)
-- **Official Scorer**: [`challenges/printing-press/src/scorer.py`](challenges/printing-press/src/scorer.py)
-- **Difficulty Benchmark**: [`challenges/printing-press/BENCHMARK.md`](challenges/printing-press/BENCHMARK.md)
-- **Physics & Design Specification**: [`challenges/printing-press/DESIGN.md`](challenges/printing-press/DESIGN.md)
