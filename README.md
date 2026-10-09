@@ -1,313 +1,333 @@
-# 🌐 Cloud & Local Online IDE
+# 🖨️ Printing Press ML Challenge
 
-> A modern, browser-based development environment featuring multi-language & Python ML code execution, interactive terminal powered by **xterm.js** and **node-pty**, live sandboxed web previews, and dual-mode storage (Supabase Cloud + Local File System Access API).
+> **Industrial Yield Regression Challenge for CodeVerse 2.0**, integrated into a browser-based development environment with live Python execution, automated scoring, and real-time telemetry visualizer.
+
+[![Challenge Repository](https://img.shields.io/badge/Challenge_Repo-Printing__Press__ML-blue?logo=github)](https://github.com/aaditya-hamirani07/Printing_Press_ML)
+[![Platform Repository](https://img.shields.io/badge/Platform_Repo-Online__IDE-10b981?logo=github)](https://github.com/aaditya-hamirani07/Online_IDE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776ab?logo=python)](https://www.python.org/)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 
 ---
 
 ## 📖 Table of Contents
 
 - [Overview](#-overview)
-- [Key Features](#-key-features)
-- [System Architecture](#-system-architecture)
+- [Challenge Highlights](#-challenge-highlights)
+- [How the Challenge Works](#-how-the-challenge-works)
+- [Dataset Specifications](#-dataset-specifications)
+- [Scoring System & Evaluation Metric](#-scoring-system--evaluation-metric)
+- [Benchmark Results](#-benchmark-results)
+- [Platform Architecture & Integration](#-platform-architecture--integration)
 - [Tech Stack](#-tech-stack)
 - [Repository Structure](#-repository-structure)
-- [How the Core Components Work](#-how-the-core-components-work)
-- [Interactive Terminal: xterm.js + node-pty](#-interactive-terminal-xtermjs--node-pty)
-- [Python ML Execution & Printing Press Challenge](#-python-ml-execution--printing-press-challenge)
-- [Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Environment Configuration](#environment-configuration)
-  - [Running the Services](#running-the-services)
-  - [Automated Verification Tests](#automated-verification-tests)
-- [Deploying to Vercel](#-deploying-to-vercel)
-- [Security & Process Sandboxing](#-security--process-sandboxing)
-- [Keyboard Shortcuts](#-keyboard-shortcuts)
-- [Troubleshooting](#-troubleshooting)
+- [Getting Started & Local Setup](#-getting-started--local-setup)
+- [Running Unit Tests & Benchmarks](#-running-unit-tests--benchmarks)
+- [Security & Answer-Key Privacy](#-security--answer-key-privacy)
+- [Links & References](#-links--references)
 
 ---
 
 ## 🎯 Overview
 
-Building a browser-based IDE is one of the most rewarding full-stack engineering challenges. It sits at the intersection of:
-- **Complex frontend state management**: nested file trees, multi-tab editors, unsaved state tracking, and live synchronization.
-- **Modern Web APIs**: the W3C File System Access API, IndexedDB (Dexie.js), and sandboxed `<iframe>` DOM manipulation.
-- **Backend systems and security**: interactive pseudo-terminal (PTY) virtualization, process confinement, execution timeouts, output capping, thread caps, and workspace isolation.
+The **Printing Press ML Challenge** is a competitive machine learning regression task developed for the **CodeVerse 2.0** technical competition. Contestants analyze simulated industrial manufacturing telemetry to predict total production output (**`amount_printed`**) under varying mechanical, operational, and environmental conditions.
 
-This project demonstrates two complementary storage paradigms:
-1. **Cloud Projects**: Backed by **Supabase (PostgreSQL)** with local snapshot caching via **IndexedDB (Dexie.js)** for instant responsiveness and offline survivability.
-2. **Local Folder Mode**: Uses the native **File System Access API** to open, edit, and save files directly to the user's local disk without uploading anything to a server.
+To provide an accessible competition experience, the challenge is hosted on **[Online_IDE](https://github.com/aaditya-hamirani07/Online_IDE)** — a full-stack, browser-based development platform featuring Monaco code editing, isolated Python runtime execution, automated validation, and visual regression telemetry.
+
+The core challenge logic and dataset generation engine are also maintained as a standalone open-source repository at **[Printing_Press_ML](https://github.com/aaditya-hamirani07/Printing_Press_ML)**.
 
 ---
 
-## ✨ Key Features
+## ✨ Challenge Highlights
 
-- **Monaco Code Editor**: Powered by VS Code's editor engine (`@monaco-editor/react`), supporting syntax highlighting, intelligent indentation, cursor tracking, and keyboard navigation.
-- **Integrated Interactive Terminal**: Real-time terminal powered by **xterm.js** on the frontend and **node-pty** on the backend over persistent WebSockets, supporting shell execution, keyboard shortcuts, ANSI colors, and dynamic window resizing.
-- **Python ML Execution Engine**: Native support for Python machine learning workflows with pre-configured thread management and automatic plot capture for Matplotlib and Seaborn.
-- **Printing Press ML Challenge**: Built-in competitive ML challenge where participants train regression models on realistic industrial printing datasets with instant feedback, scoring, and visualization.
-- **Live Sandboxed Web Preview**: Instant preview of HTML/CSS/JavaScript projects. Automatically parses local stylesheets and scripts, bundles them in-memory, and renders them in an isolated `iframe` with responsive device views (Laptop, Tablet, Mobile).
-- **Dual Workspace System**:
-  - *Cloud Mode*: Persistent hierarchical project storage in PostgreSQL via Supabase.
-  - *Local Mode*: Direct disk read/write access via Chrome/Edge File System Access API.
-- **Offline & Cache Resilience**: IndexedDB caching ensures instant page reloads even before remote database queries resolve.
-- **macOS-Inspired Design**: Resizable panels with width memory (`localStorage`), clean typography, custom modal dialogs, and native dark/light theme integration.
+- **Supervised Industrial Regression**: Predict continuous production volume (`amount_printed`) from multi-dimensional telemetry data.
+- **8,500 Total Samples**: Partitioned into a public training set (7,000 samples) and a withheld evaluation test set (1,500 samples).
+- **15 Heterogeneous Features**: 8 numerical metrics and 7 categorical features spanning machine specifications, sensor readings, and shift logs.
+- **Physical Non-Linear Dynamics**: Synthesized using a domain-driven simulation engine ([`generator.py`](challenges/printing-press/generator.py)) with realistic mechanical vibration, thermal degradation, humidity moisture resistance, and machine fatigue.
+- **Automated In-IDE Grading**: Real-time evaluation pipeline with automated schema validation, relative absolute percentage error scoring, and a 10-point scale.
+- **Telemetry Visualizer**: Automatic capture and rendering of Matplotlib / Seaborn residual plots directly in the web UI.
 
 ---
 
-## 🏗 System Architecture
+## 🕹️ How the Challenge Works
+
+Contestants interact with the challenge through the dedicated workspace route at `/printing-press`:
+
+```
+┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐       ┌──────────────────┐
+│  1. Explore     │  ──►  │  2. Preprocess  │  ──►  │   3. Train      │  ──►  │  4. Evaluate     │
+│  train.csv      │       │  & Engineer     │       │   ML Regressor  │       │  test.csv (1500) │
+└─────────────────┘       └─────────────────┘       └─────────────────┘       └─────────┬────────┘
+                                                                                        │
+                                                                                        ▼
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  5. Automated Grading via Online_IDE Execution Service                                            │
+│  • Compares 'predictions' against private answer key server-side                                 │
+│  • Computes relative error percentage and maps to 10-point score                                 │
+│  • Renders diagnostics checklist, error breakdown, and telemetry plots in IDE                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Explore the Data**: `train.csv` (features + ground-truth targets) and `test.csv` (features only) are automatically pre-seeded into the contestant's workspace.
+2. **Feature Engineering & Preprocessing**: Handle sensor missing values (`NaN`), encode categorical identifiers (machine types, shifts, paper grades), and scale numerical features.
+3. **Train Regression Models**: Train machine learning models using Scikit-learn, XGBoost, LightGBM, or custom ensembles.
+4. **Generate Test Predictions**: Run inference on `test.csv` and assign the 1,500-element output array to the global `predictions` variable.
+5. **Instant In-Browser Evaluation**: Click **"Run Operation"** to execute the script in the isolated backend runner. The server validates output format, scores predictions against the private ground truth, and displays points and visual diagnostics.
+
+---
+
+## 📊 Dataset Specifications
+
+The dataset models realistic industrial printing press operations with complex feature interactions:
+
+| Partition | Rows | Columns | Target Column | Access |
+|---|---:|---:|---|---|
+| [`data/train.csv`](challenges/printing-press/data/train.csv) | 7,000 | 17 (ID + 15 features + target) | `amount_printed` | Public in workspace |
+| [`data/test.csv`](challenges/printing-press/data/test.csv) | 1,500 | 16 (ID + 15 features) | Withheld | Public in workspace |
+| `data/answer_key.csv` | 1,500 | 2 (ID + `amount_printed`) | `amount_printed` | Private (server-side only) |
+
+### Feature Summary
+
+- **Numerical Features (8)**: `printing_speed` (prints/min), `machine_age` (years), `operating_hours` (hours), `temperature` (°C), `humidity` (%), `power_stability` (0–100 index), `setup_time` (mins), `last_calibration_day` (days).
+- **Categorical Features (7)**: `paper_type` (Standard, Glossy, Matte, Cardstock), `shift` (Morning, Afternoon, Night), `maintenance_status` (Good, Average, Poor), `machine_type` (Type_A–D), `paper_quality` (Low, Medium, High), `operator_id` (Op01–Op10), `ink_batch_id` (B01–B20).
+
+*For the complete mathematical physics specification, see [`DESIGN.md`](challenges/printing-press/DESIGN.md).*
+
+---
+
+## 📐 Scoring System & Evaluation Metric
+
+Submissions are evaluated on the test set using the **Relative Absolute Percentage Error** metric:
+
+$$\text{Overall Error \%} = \frac{\sum_{i=1}^{N} |\text{predicted}_i - \text{actual}_i|}{\sum_{i=1}^{N} \text{actual}_i} \times 100$$
+
+### Official 10-Point Scoring Scale
+
+Points are awarded based on the overall percentage error on the held-out 1,500 test samples:
+
+| Overall Error Bracket | Official Score | Performance Tier |
+|---|:---:|:---|
+| $\le 2.0\%$ | **10 / 10** | 🏆 Grandmaster Tier (Exceptional precision & interaction modeling) |
+| $> 2.0\%$ and $\le 5.0\%$ | **9 / 10** | 🥇 Top Benchmark (Tuned Gradient Boosting / Ensemble) |
+| $> 5.0\%$ and $\le 10.0\%$ | **8 / 10** | 🥈 High Performance (Random Forest / Advanced Trees) |
+| $> 10.0\%$ and $\le 15.0\%$ | **7 / 10** | 🥉 Solid Generalization (Ridge Regression / Linear Baselines) |
+| $> 15.0\%$ and $\le 20.0\%$ | **6 / 10** | Baseline ML Regressor |
+| $> 20.0\%$ and $\le 30.0\%$ | **4 / 10** | Underfitted / Basic Linear Model |
+| $> 30.0\%$ and $\le 50.0\%$ | **2 / 10** | Mean Baseline / Minimal Feature Extraction |
+| $> 50.0\%$ | **0 / 10** | Untrained / Invalid Outputs |
+
+---
+
+## 📈 Benchmark Results
+
+The challenge difficulty has been validated using four reproducible baseline models evaluated on the official 1,500-sample test set (see [`BENCHMARK.md`](challenges/printing-press/BENCHMARK.md)):
+
+| Model | Validation R² (20% Holdout) | Test Error % (Ground Truth) | Official Points |
+|:---|:---:|:---:|:---:|
+| **Mean Baseline** (`DummyRegressor`) | −0.0000 | 39.81% | **2 / 10** |
+| **Ridge Regression** (`Ridge(alpha=10.0)`) | 0.8284 | 15.54% | **6 / 10** |
+| **Random Forest** (`n_estimators=150, max_depth=16`) | 0.9410 | 8.68% | **8 / 10** |
+| **Gradient Boosting** (`HistGradientBoostingRegressor`) | 0.9790 | 4.76% | **9 / 10** |
+
+> **Note**: The $\le 2.0\%$ error threshold (10/10 points) requires advanced feature engineering, nonlinear interaction terms, or tuned gradient boosting algorithms.
+
+---
+
+## 🏗️ Platform Architecture & Integration
+
+Online_IDE provides the full execution and evaluation harness for the challenge:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │                              BROWSER                                   │
 │                                                                        │
-│  ┌───────────────────┐    ┌─────────────────┐    ┌──────────────────┐  │
-│  │    File Tree      │    │  Monaco Editor  │    │  Output / Stdin  │  │
-│  │ (Nested Explorer) │    │  (Multi-Tabs)   │    │ (Console/Status) │  │
-│  └─────────┬─────────┘    └────────┬────────┘    └────────▲─────────┘  │
-│            │                       │                      │            │
-│            ▼                       ▼                      │            │
-│     [State Coordinator: openFiles, activeId, dirty flags] │            │
-│            │                                              │            │
-│            ├──────────────────────┬───────────────────────┤            │
-│            ▼                      ▼                       ▼            │
-│     ┌──────────────┐      ┌───────────────┐      ┌─────────────────┐   │
-│     │ Local Disk   │      │   IndexedDB   │      │ Preview Panel   │   │
-│     │ (W3C FS API) │      │  (Dexie Cache)│      │(Isolated iframe)│   │
-│     └──────────────┘      └───────────────┘      └─────────────────┘   │
-│                                                           │            │
-│  ┌─────────────────────────────────────────────────────┐  │            │
-│  │ xterm.js Terminal (WebSocket Client)                │  │            │
-│  └─────────────────────────┬───────────────────────────┘  │            │
-└────────────────────────────┼──────────────────────────────┼────────────┘
-                             │                              │
-         WebSocket Streaming │                              │ HTTP Proxy
-                             ▼                              ▼
+│  ┌───────────────────────┐   ┌─────────────────┐   ┌────────────────┐  │
+│  │ Challenge File Tree   │   │ Monaco Editor   │   │ Telemetry &    │  │
+│  │ (main.py, train, test)│   │ (Python Source) │   │ Output Panel   │  │
+│  └───────────┬───────────┘   └────────┬────────┘   └───────▲────────┘  │
+│              │                        │                    │           │
+│              └────────────────────────┼────────────────────┘           │
+│                                       ▼                                │
+│                   POST /api/printing-press/run                         │
+└───────────────────────────────────────┬────────────────────────────────┘
+                                        │
+                                        ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │                   Next.js 16 App Router Backend                        │
-│                                                                        │
-│   GET/POST/DELETE /api/projects  ──► Supabase (PostgreSQL)             │
-│   POST/PATCH/DELETE /api/files   ──► Supabase (PostgreSQL)             │
-│   POST /api/run                  ──► Forward to Backend Service        │
-│   POST /api/printing-press/run   ──► Model Scoring & Visualizer        │
-└────────────────────────────┬───────────────────────────────────────────┘
-                             │
-                             ▼
+│   • Injects execution wrapper & telemetry extraction hooks             │
+│   • Validates prediction array format (shape, numeric, NaN/Inf checks) │
+│   • Computes error against server-side answer key                      │
+│   • Maps error to 10-point scale & contextual feedback hints           │
+└───────────────────────────────────────┬────────────────────────────────┘
+                                        │
+                                        ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│              Modular Terminal & Execution Service (:4000)              │
-│                                                                        │
-│   ┌────────────────────────────────────────────────────────────────┐   │
-│   │ node-pty Interactive Terminal (ws://localhost:4000/terminal)   │   │
-│   │ • Real-time PowerShell / Bash PTY                              │   │
-│   │ • Session reconnection grace periods & abandoned eviction      │   │
-│   │ • Dynamic terminal cols/rows resize observation                │   │
-│   └────────────────────────────────────────────────────────────────┘   │
-│   ┌────────────────────────────────────────────────────────────────┐   │
-│   │ Multi-Language & ML Execution Engine (/execute)                │   │
-│   │ • Python 3 (NumPy, Pandas, Scikit-learn, Matplotlib)           │   │
-│   │ • Node.js (JavaScript, JSX, TSX)                               │   │
-│   │ • GCC / G++ (C, C++)                                           │   │
-│   │ • CPU thread caps (OMP, OpenBLAS, Loky = 4)                   │   │
-│   │ • Isolated workspace directories & path traversal prevention   │   │
-│   │ • Process-tree termination (taskkill / SIGKILL) & output caps  │   │
-│   └────────────────────────────────────────────────────────────────┘   │
+│              Modular Execution Backend Service (:4000)                 │
+│   • Sandboxed workspace directory isolation                            │
+│   • Pre-seeds train.csv & test.csv into execution workspace            │
+│   • Thread limits (SANDBOX_THREAD_CAP=4) & 5-minute timeout caps       │
+│   • Captures Matplotlib / Seaborn plots in headless mode               │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🛠 Tech Stack
+## 🛠️ Tech Stack
 
-| Layer | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Framework** | [Next.js 16](https://nextjs.org/) (App Router) | Full-stack framework, SSR, and API route handlers |
-| **UI Library** | [React 19](https://react.dev/) | Client components, declarative state, hooks |
-| **Editor** | [@monaco-editor/react](https://github.com/suren-atoyan/monaco-react) | Desktop-grade code editor powered by VS Code |
-| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) | Semantic CSS variables, responsive design, dark mode |
-| **Terminal Frontend** | [@xterm/xterm](https://xtermjs.org/) + [@xterm/addon-fit](https://www.npmjs.com/package/@xterm/addon-fit) | Web-based terminal emulator with resize observer |
-| **Terminal Backend** | [node-pty](https://github.com/microsoft/node-pty) + [ws](https://github.com/websockets/ws) | Native pseudo-terminal process spawner and WebSocket server |
-| **Client Storage** | [Dexie.js](https://dexie.org/) | Type-safe IndexedDB wrapper for local caching |
-| **Cloud Database** | [Supabase](https://supabase.com/) | Managed PostgreSQL database with Row Level Security |
-| **Python ML Engine** | NumPy, Pandas, Scikit-learn, Matplotlib | Machine learning regression modeling & data science workflows |
+### Machine Learning & Data Science Stack
+- **Runtime**: Python 3.10+
+- **Data Manipulation**: [Pandas](https://pandas.pydata.org/), [NumPy](https://numpy.org/)
+- **Machine Learning**: [Scikit-learn](https://scikit-learn.org/), [SciPy](https://scipy.org/), [XGBoost](https://xgboost.readthedocs.io/), [LightGBM](https://lightgbm.readthedocs.io/)
+- **Data Visualization**: [Matplotlib](https://matplotlib.org/) (Headless `Agg`), [Seaborn](https://seaborn.pydata.org/)
+
+### IDE & Platform Infrastructure
+- **Frontend Framework**: [Next.js 16](https://nextjs.org/) (App Router) + [React 19](https://react.dev/)
+- **Code Editor**: [@monaco-editor/react](https://github.com/suren-atoyan/monaco-react)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Terminal Emulator**: [@xterm/xterm](https://xtermjs.org/) + [node-pty](https://github.com/microsoft/node-pty)
+- **Storage & State**: [Supabase](https://supabase.com/) (PostgreSQL & Storage) + [Dexie.js](https://dexie.org/) (IndexedDB)
+- **Backend Execution Service**: Node.js HTTP/WebSocket server with process tree management
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-├── server/                    # Modular Terminal & Execution Backend Service
-│   ├── index.js               # Main HTTP & WebSocket server entry point
-│   ├── config.js              # Port, timeouts, resource caps, allowed env keys
-│   ├── workspace.js           # Isolated workspaces, traversal security, dataset seeding
-│   ├── env.js                 # Environment sanitization, thread caps, process tree kill
-│   ├── runner.js              # Multi-language code execution runner with process limits
-│   └── terminal.js            # node-pty terminal sessions & WebSocket streaming
-├── challenges/                # Coding challenges and competitions
-│   └── printing-press/        # Printing Press ML regression challenge
-│       ├── data/              # train.csv, test.csv, answer_key.csv
-│       ├── generator.py       # Deterministic dataset generator
-│       ├── src/scorer.py      # Official validation and scoring logic
-│       ├── tests/             # Challenge unit test suite
-│       └── benchmark.py       # ML difficulty benchmark suite
+Online_IDE/
+├── challenges/
+│   └── printing-press/            # 🖨️ Printing Press ML Challenge Core
+│       ├── data/
+│       │   ├── train.csv          # 7,000 training samples (public)
+│       │   ├── test.csv           # 1,500 test samples (public features)
+│       │   └── answer_key.csv     # 1,500 private test targets (server-only)
+│       ├── src/
+│       │   └── scorer.py          # Official scoring module & validation logic
+│       ├── tests/
+│       │   └── test_scorer.py     # Unit tests for scoring boundaries
+│       ├── generator.py           # Synthetic physical simulation dataset generator
+│       ├── benchmark.py           # Difficulty benchmark runner (test & val modes)
+│       ├── DESIGN.md              # Domain physics & feature interaction design
+│       ├── BENCHMARK.md           # Benchmark documentation & model baseline table
+│       ├── README.md              # Dedicated challenge documentation
+│       └── requirements.txt       # Python ML dependencies
 ├── src/
-│   ├── app/                   # Next.js App Router
-│   │   ├── layout.tsx         # Root layout with Toast and Dialog providers
-│   │   ├── globals.css        # Theme variables and semantic design tokens
-│   │   ├── page.tsx           # Dashboard: list projects, create, open local folder
-│   │   ├── printing-press/    # Printing Press ML Challenge workspace route
-│   │   ├── project/[id]/      # Cloud Project Workspace route
-│   │   ├── local/             # Local Folder Workspace route
-│   │   └── api/               # API route handlers (/run, /printing-press/run, /projects, /files)
-│   ├── components/            # UI components (Editor, FileTree, TerminalPanel, OutputPanel, etc.)
-│   ├── lib/                   # Utilities (executor, workspaceSync, localFs, localDb, supabase, etc.)
-│   └── types/                 # TypeScript interfaces and declarations
-├── supabase/
-│   └── schema.sql             # PostgreSQL schema and RLS policies
+│   ├── app/
+│   │   ├── printing-press/        # 🎯 Challenge workspace & heist-themed UI
+│   │   ├── project/[id]/          # Cloud project workspace
+│   │   ├── local/                 # Local folder workspace (FS Access API)
+│   │   └── api/
+│   │       └── printing-press/
+│   │           ├── run/           # Code execution, validation & scoring API
+│   │           └── verify/        # Event game key verification API
+│   ├── components/                # Monaco Editor, OutputPanel, TerminalPanel, etc.
+│   └── lib/                       # Language map, audio synthesizer, executor client
+├── server/                        # Modular Node.js execution & terminal runner
+│   ├── runner.js                  # Multi-language sandboxed execution runner
+│   ├── workspace.js               # Workspace isolation & challenge dataset seeding
+│   ├── env.js                     # Environment sanitization & thread capping
+│   └── terminal.js                # node-pty WebSocket PTY session management
 ├── scripts/
-│   └── test-system.js         # Automated end-to-end service verification test
-├── package.json               # Dependencies and scripts
-└── tsconfig.json              # TypeScript compiler configuration
+│   └── test-system.js             # Automated end-to-end service verification
+├── package.json                   # Project scripts and dependencies
+└── tsconfig.json                  # TypeScript configuration
 ```
 
 ---
 
-## 💻 Interactive Terminal: xterm.js + node-pty
+## 🚀 Getting Started & Local Setup
 
-The legacy Docker sandbox has been completely replaced with an integrated, high-performance interactive terminal architecture:
+### 1. Prerequisites
 
-1. **Frontend (`src/components/TerminalPanel.tsx`)**:
-   - Built with `@xterm/xterm` and `@xterm/addon-fit`.
-   - Listens to terminal DOM container resize events via `ResizeObserver` and dispatches `{ type: "resize", cols, rows }` control frames to the backend.
-   - Automatically maintains terminal dimensions when switching between Console, Terminal, and Preview panels.
-   - Handles connection status messages, reconnections, and keyboard interactions.
+- **Node.js 20+** and npm
+- **Python 3.10+** with scientific and ML packages
 
-2. **Backend (`server/terminal.js`)**:
-   - Uses `node-pty` to spawn real pseudo-terminal processes (PowerShell on Windows, Bash on Linux/macOS).
-   - Manages session IDs with reconnect grace periods (45 seconds), preserving running commands during brief network disconnections.
-   - Automatically cleans up inactive terminal sessions (> 2 hours) and provides clean process tree termination on exit.
-
----
-
-## 🤖 Python ML Execution & Printing Press Challenge
-
-The platform provides a first-class Python machine learning execution environment:
-
-1. **Native ML Library Support**:
-   - NumPy, Pandas, Scikit-learn, Scipy, and Matplotlib are fully supported.
-   - Headless graphics rendering is enforced via `MPLBACKEND=Agg`.
-
-2. **Printing Press Challenge (`challenges/printing-press/`)**:
-   - Objective: Predict `amount_printed` based on machine operating hours, speed, temperature, humidity, power stability, and paper quality.
-   - `train.csv` (7,000 samples) and `test.csv` (1,500 samples) are pre-seeded into contestant workspaces.
-   - `answer_key.csv` remains strictly private on the server for official scoring.
-   - Visual plot generation: Plots saved to `visualization.png` or created with `plt.show()` / `plt.savefig()` are automatically captured and displayed in the IDE.
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- [Node.js 20+](https://nodejs.org/) and npm
-- [Python 3.10+](https://www.python.org/) with ML packages:
-  ```bash
-  pip install numpy pandas scikit-learn matplotlib
-  ```
-- GCC / G++ (optional, for C/C++ execution)
-- Google Chrome or Microsoft Edge (for Local Folder mode)
-
-### Environment Configuration
-
-Create a `.env.local` file from the template:
+### 2. Install Dependencies
 
 ```bash
-copy .env.local.example .env.local
+# Install platform npm dependencies
+npm install
+
+# Install challenge Python ML dependencies
+pip install -r challenges/printing-press/requirements.txt
 ```
 
-Configure your variables:
+### 3. Environment Configuration
+
+Create a local environment file:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Default local environment values:
 
 ```ini
-# Supabase credentials (optional for local/challenge mode)
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-anon-key
-
-# Execution service URL
 EXECUTOR_URL=http://localhost:4000
 NEXT_PUBLIC_EXECUTOR_URL=http://localhost:4000
 NEXT_PUBLIC_TERMINAL_WS_URL=ws://localhost:4000/terminal
 ```
 
-### Running the Services
+### 4. Running the Platform Services
 
-Start the backend terminal and execution service:
+Start the execution service (runs on port 4000):
 
 ```bash
 npm run server
 ```
 
-In a separate terminal, start the Next.js frontend:
+In a separate terminal, start the Next.js development server:
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:3000` in your browser.
+Visit [`http://localhost:3000/printing-press`](http://localhost:3000/printing-press) to open the challenge interface.
 
-### Automated Verification Tests
+---
 
-Verify all system capabilities (health check, Python ML execution, WebSocket interactive terminal, workspace sync):
+## 🧪 Running Unit Tests & Benchmarks
+
+### 1. Scorer Unit Tests
+
+Run the official unit test suite to verify scoring boundaries and validation constraints:
 
 ```bash
-npm test
+python -m unittest challenges/printing-press/tests/test_scorer.py
 ```
 
-## ☁️ Deploying to Vercel
+### 2. Model Benchmark Suite
 
-Vercel hosts the Next.js app and its HTTP routes. The interactive terminal and code execution service in `server/` must run separately on a persistent Node.js host that supports WebSockets, `node-pty`, Python, and any other language runtimes you enable. Do not point production settings at `localhost`.
+Run the reproducible benchmark suite:
 
-1. Create a Supabase project and run `supabase/schema.sql` in its SQL editor. In Storage, create a **private** bucket named `challenge-private` and upload the local `challenges/printing-press/data/answer_key.csv` to `printing-press/answer_key.csv`. This file is intentionally excluded from Git; do not make the bucket public.
-2. Deploy `server/` on a persistent host. Set its runtime dependencies and language runtimes, expose HTTPS and WebSocket traffic, and confirm `/health` responds with `{ "ok": true }`. Configure the host's firewall and access controls; the execution service runs submitted code and must not be treated as a trusted public API.
-3. Import this repository into Vercel. Add these project environment variables for **Production** (and Preview if needed):
+```bash
+python challenges/printing-press/benchmark.py
+```
 
-   - `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL.
-   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: Supabase publishable/anon key.
-   - `SUPABASE_SERVICE_ROLE_KEY`: Supabase service-role key. Keep this server-only; never use a `NEXT_PUBLIC_` prefix.
-   - `EXECUTOR_URL`: HTTPS base URL of the execution service, without a trailing slash.
-   - `NEXT_PUBLIC_EXECUTOR_URL`: the same HTTPS base URL, used for workspace synchronization in the browser.
-   - `NEXT_PUBLIC_TERMINAL_WS_URL`: `wss://` URL of the terminal endpoint, for example `wss://executor.example.com/terminal`.
-   - `PRINTING_PRESS_ANSWER_KEY_BUCKET` and `PRINTING_PRESS_ANSWER_KEY_PATH`: optional; defaults are `challenge-private` and `printing-press/answer_key.csv`.
+- **With Answer Key**: Computes both 20% holdout validation metrics and official ground-truth test scores.
+- **Without Answer Key (Validation Mode)**: Automatically falls back to 80/20 train/validation evaluation.
 
-4. Deploy using Vercel's default install and build commands (`npm install` and `npm run build`). The execution API routes request up to 300 seconds; the Vercel plan must permit that function duration for long-running jobs. Redeploy after changing environment variables.
+### 3. Submission CLI Scorer
 
-Local `.env.local` values are examples only. Replace all placeholder URLs and keys before deploying. Without Supabase credentials the project routes cannot start; without the external execution service, run and terminal features will fail even though the site itself builds.
+To score a submission CSV file against the answer key via CLI:
 
----
-
-## 🔒 Security & Process Sandboxing
-
-Since `node-pty` and native runners interact directly with host processes, multi-layered safeguards are implemented:
-
-- **Path Traversal Defense**: All workspace paths are strictly sanitized with directory boundary verification (`!targetDir.startsWith(WORKSPACES_ROOT)`), preventing unauthorized filesystem escapes.
-- **Environment Sanitization**: Strips sensitive environment variables (such as server API secrets, database passwords, or auth keys) before passing the environment to student scripts or PTY processes.
-- **CPU & Thread Caps**: Enforces `SANDBOX_THREAD_CAP` (default 4) across OpenMP, OpenBLAS, MKL, NumExpr, and Loky to prevent thread exhaustion or CPU starvation.
-- **Execution Timeouts & Buffer Limits**: Enforces a 5-minute timeout per execution run with recursive process tree termination (`taskkill /T /F` on Windows, `SIGKILL` on POSIX) and caps output buffers at 2MB.
-- **Private Dataset Isolation**: Hidden test answer keys (`answer_key.csv`) are kept exclusively on the server and are never copied to participant workspace directories.
+```bash
+python challenges/printing-press/src/scorer.py submission.csv --answer-key challenges/printing-press/data/answer_key.csv
+```
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## 🔒 Security & Answer-Key Privacy
 
-| Shortcut | Action |
-| :--- | :--- |
-| `Ctrl / Cmd + S` | Save the active file |
-| `Alt + W` | Close the active editor tab |
-| `Alt + N` | Create a new file at workspace root |
-| `Alt + B` | Toggle the file explorer sidebar |
+- **Strict Dataset Isolation**: [`server/workspace.js`](server/workspace.js) seeds only `train.csv` and `test.csv` to contestant workspaces. `answer_key.csv` is never copied to user directories.
+- **Server-Side Grading**: Prediction evaluation occurs in the backend API ([`src/app/api/printing-press/run/route.ts`](src/app/api/printing-press/run/route.ts)) or from private cloud storage in production.
+- **Resource Limits**: The execution runner enforces execution timeouts (5 minutes), CPU thread caps (`SANDBOX_THREAD_CAP=4`), and sanitized environment variables.
 
 ---
 
-## 🩺 Troubleshooting
+## 🔗 Links & References
 
-- **Server Not Running**: Run `npm run server` and verify `http://localhost:4000/health` returns `{ "ok": true }`.
-- **WebSocket Terminal Fails**: Ensure port 4000 is open and not blocked by local firewall software.
-- **Local Folder Permission**: In Chrome/Edge, if you refresh the page, click "Grant Access" to resume local folder editing.
-- **Printing Press Error**: Ensure Python with `pandas`, `numpy`, and `scikit-learn` is installed in your system PATH.
+- **Standalone Challenge Repo**: [github.com/aaditya-hamirani07/Printing_Press_ML](https://github.com/aaditya-hamirani07/Printing_Press_ML)
+- **Deployment Platform Repo**: [github.com/aaditya-hamirani07/Online_IDE](https://github.com/aaditya-hamirani07/Online_IDE)
+- **Dataset Generation Engine**: [`challenges/printing-press/generator.py`](challenges/printing-press/generator.py)
+- **Official Scorer**: [`challenges/printing-press/src/scorer.py`](challenges/printing-press/src/scorer.py)
+- **Difficulty Benchmark**: [`challenges/printing-press/BENCHMARK.md`](challenges/printing-press/BENCHMARK.md)
+- **Physics & Design Specification**: [`challenges/printing-press/DESIGN.md`](challenges/printing-press/DESIGN.md)
