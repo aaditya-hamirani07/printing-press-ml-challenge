@@ -1,4 +1,4 @@
-# Printing Press ML Challenge
+# 🖨️ Printing Press ML Challenge
 
 > **Industrial Yield Regression Challenge for CodeVerse 2.0**, integrated into a browser-based development platform with isolated Python code execution, automated validation, and real-time telemetry visualizer.
 
@@ -11,23 +11,23 @@
 
 ## 📖 Table of Contents
 
-- [Overview](#overview)
-- [Challenge Highlights](#challenge-highlights)
-- [How the Challenge Works](#how-the-challenge-works)
-- [Dataset Specifications](#dataset-specifications)
-- [Scoring System & Evaluation Metric](#scoring-system--evaluation-metric)
-- [Benchmark Results](#benchmark-results)
-- [Platform Architecture & Integration](#platform-architecture--integration)
-- [Tech Stack](#tech-stack)
-- [Repository Structure](#repository-structure)
-- [Getting Started & Local Setup](#getting-started--local-setup)
-- [Running Unit Tests & Benchmarks](#running-unit-tests--benchmarks)
-- [Security & Answer-Key Privacy](#security--answer-key-privacy)
-- [Links & References](#links--references)
+- [🎯 Overview](#overview)
+- [✨ Challenge Highlights](#challenge-highlights)
+- [⚙️ How the Challenge Works](#how-the-challenge-works)
+- [📊 Dataset Specifications](#dataset-specifications)
+- [📐 Scoring System & Evaluation Metric](#scoring-system--evaluation-metric)
+- [📈 Benchmark Results](#benchmark-results)
+- [🏗️ Platform Architecture & Integration](#platform-architecture--integration)
+- [🛠️ Tech Stack](#tech-stack)
+- [📁 Repository Structure](#repository-structure)
+- [🚀 Getting Started & Local Setup](#getting-started--local-setup)
+- [🧪 Running Unit Tests & Benchmarks](#running-unit-tests--benchmarks)
+- [🔒 Security & Answer-Key Privacy](#security--answer-key-privacy)
+- [🔗 Links & References](#links--references)
 
 ---
 
-## Overview
+## 🎯 Overview
 
 The **Printing Press ML Challenge** is an industrial machine learning regression competition developed for the **CodeVerse 2.0** technical event. The objective is to predict the total manufacturing volume (**`amount_printed`**) of industrial printing press runs based on machine operating telemetry, material characteristics, operational parameters, and environmental sensor readings.
 
@@ -37,18 +37,18 @@ The core dataset generation engine, physics simulation design, and scoring modul
 
 ---
 
-## Challenge Highlights
+## ✨ Challenge Highlights
 
-- **Supervised Industrial Regression**: Predict continuous production volume (`amount_printed`) from heterogeneous tabular telemetry.
-- **8,500 Total Samples**: Partitioned into a public training set (7,000 samples) and a withheld evaluation test set (1,500 samples).
-- **15 Input Features**: 8 numerical metrics and 7 categorical features modeling machinery, environmental sensors, materials, and shifts.
-- **Synthetic Physical Simulation**: Generated using a domain-driven physics model ([`generator.py`](challenges/printing-press/generator.py)) featuring nonlinear speed efficiency degradation, thermal wear, humidity-induced drag, machine fatigue, and 3 noise features.
-- **Automated In-IDE Grading**: Real-time evaluation pipeline via `POST /api/printing-press/run` that inspects the participant's `predictions` variable, validates schema and value bounds, and computes official score points.
-- **Telemetry Visualizer**: Automatic server-side capture of Matplotlib and Seaborn plots rendered directly in the web UI.
+- 🎯 **Supervised Industrial Regression**: Predict continuous production volume (`amount_printed`) from heterogeneous tabular telemetry.
+- 📦 **8,500 Total Samples**: Partitioned into a public training set (7,000 samples) and a withheld evaluation test set (1,500 samples).
+- 🔬 **15 Input Features**: 8 numerical metrics and 7 categorical features modeling machinery, environmental sensors, materials, and shifts.
+- ⚙️ **Synthetic Physical Simulation**: Generated using a domain-driven physics model ([`generator.py`](challenges/printing-press/generator.py)) featuring nonlinear speed efficiency degradation, thermal wear, humidity-induced drag, machine fatigue, and 3 noise features.
+- ⚡ **Automated In-IDE Grading**: Real-time evaluation pipeline via `POST /api/printing-press/run` that inspects the participant's `predictions` variable, validates schema and value bounds, and computes official score points.
+- 📊 **Telemetry Visualizer**: Automatic server-side capture of Matplotlib and Seaborn plots rendered directly in the web UI.
 
 ---
 
-## How the Challenge Works
+## ⚙️ How the Challenge Works
 
 Contestants participate directly in the browser via the challenge workspace at `/printing-press`:
 
@@ -87,7 +87,7 @@ Contestants participate directly in the browser via the challenge workspace at `
 
 ---
 
-## Dataset Specifications
+## 📊 Dataset Specifications
 
 The dataset models industrial printing press operations with realistic nonlinear constraints and interaction dynamics:
 
@@ -106,7 +106,7 @@ The dataset models industrial printing press operations with realistic nonlinear
 
 ---
 
-## Scoring System & Evaluation Metric
+## 📐 Scoring System & Evaluation Metric
 
 Submissions are evaluated on the 1,500 test samples using the **Relative Absolute Percentage Error** metric:
 
@@ -129,7 +129,7 @@ Points are awarded based on the overall percentage error on the withheld test se
 
 ---
 
-## Benchmark Results
+## 📈 Benchmark Results
 
 Challenge difficulty is benchmarked across four standard machine learning models evaluated under reproducible conditions (see [`BENCHMARK.md`](challenges/printing-press/BENCHMARK.md)):
 
@@ -140,21 +140,21 @@ Challenge difficulty is benchmarked across four standard machine learning models
 | **Random Forest** (`n_estimators=150, max_depth=16`) | 0.9410 | 8.68% | **8 / 10** |
 | **Gradient Boosting** (`HistGradientBoostingRegressor`) | 0.9790 | 4.76% | **9 / 10** |
 
-> **Note**: Validation R² is measured on a held-out 20% split of `train.csv`. The private evaluation ground truth is used solely for final test scoring. The $\le 2.0\%$ bracket (10 points) was not reached by standard baseline models with default hyperparameters.
+> 💡 **Note**: Validation R² is measured on a held-out 20% split of `train.csv`. The private evaluation ground truth is used solely for final test scoring. The $\le 2.0\%$ bracket (10 points) was not reached by standard baseline models with default hyperparameters.
 
 ---
 
-## Platform Architecture & Integration
+## 🏗️ Platform Architecture & Integration
 
 Online_IDE provides the full execution and evaluation runtime for the challenge:
 
-- **Frontend (`src/app/printing-press/`)**: Monaco code editor with custom themes, interactive progress tracking, audio controls, and an output console with a visualization tab.
-- **Grading API (`src/app/api/printing-press/run/route.ts`)**: Wraps contestant code with headless Matplotlib configuration (`MPLBACKEND=Agg`), intercepts predictions, and grades them server-side.
-- **Execution Service (`server/`)**: Modular Node.js execution backend that manages workspace directories, pre-seeds challenge data, enforces thread limits (`SANDBOX_THREAD_CAP=4`), and caps runtimes at 5 minutes.
+- 🖥️ **Frontend (`src/app/printing-press/`)**: Monaco code editor with custom themes, interactive progress tracking, audio controls, and an output console with a visualization tab.
+- ⚙️ **Grading API (`src/app/api/printing-press/run/route.ts`)**: Wraps contestant code with headless Matplotlib configuration (`MPLBACKEND=Agg`), intercepts predictions, and grades them server-side.
+- 🔒 **Execution Service (`server/`)**: Modular Node.js execution backend that manages workspace directories, pre-seeds challenge data, enforces thread limits (`SANDBOX_THREAD_CAP=4`), and caps runtimes at 5 minutes.
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 ### Machine Learning & Data Science Stack
 - **Language**: Python 3.10+
@@ -169,7 +169,7 @@ Online_IDE provides the full execution and evaluation runtime for the challenge:
 
 ---
 
-## Repository Structure
+## 📁 Repository Structure
 
 ```
 Online_IDE/
@@ -207,7 +207,7 @@ Online_IDE/
 
 ---
 
-## Getting Started & Local Setup
+## 🚀 Getting Started & Local Setup
 
 ### 1. Prerequisites
 
@@ -258,7 +258,7 @@ Open [`http://localhost:3000/printing-press`](http://localhost:3000/printing-pre
 
 ---
 
-## Running Unit Tests & Benchmarks
+## 🧪 Running Unit Tests & Benchmarks
 
 ### 1. Scorer Unit Tests
 
@@ -289,15 +289,15 @@ python challenges/printing-press/src/scorer.py submission.csv --answer-key chall
 
 ---
 
-## Security & Answer-Key Privacy
+## 🔒 Security & Answer-Key Privacy
 
-- **Dataset Isolation**: [`server/workspace.js`](server/workspace.js) pre-seeds only `train.csv` and `test.csv` into contestant workspace directories. Evaluation answer keys are never exposed or copied to client workspaces.
-- **Server-Side Evaluation**: All test prediction scoring occurs in the backend execution pipeline or via private cloud storage in production.
-- **Resource Sandboxing**: Python execution is governed by a 5-minute timeout, CPU thread caps (`SANDBOX_THREAD_CAP=4`), 2MB output limits, and sanitized environment variables.
+- 🛡️ **Dataset Isolation**: [`server/workspace.js`](server/workspace.js) pre-seeds only `train.csv` and `test.csv` into contestant workspace directories. Evaluation answer keys are never exposed or copied to client workspaces.
+- 🔐 **Server-Side Evaluation**: All test prediction scoring occurs in the backend execution pipeline or via private cloud storage in production.
+- ⏱️ **Resource Sandboxing**: Python execution is governed by a 5-minute timeout, CPU thread caps (`SANDBOX_THREAD_CAP=4`), 2MB output limits, and sanitized environment variables.
 
 ---
 
-## Links & References
+## 🔗 Links & References
 
 - **Standalone Challenge Repository**: [github.com/aaditya-hamirani07/Printing_Press_ML](https://github.com/aaditya-hamirani07/Printing_Press_ML)
 - **Platform Repository**: [github.com/aaditya-hamirani07/Online_IDE](https://github.com/aaditya-hamirani07/Online_IDE)
