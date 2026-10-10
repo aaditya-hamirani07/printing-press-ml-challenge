@@ -1,4 +1,4 @@
-# Printing Press ML — Industrial Yield Regression Challenge
+# Printing Press ML 
 
 A machine learning regression challenge developed for a college technical event, designed to evaluate feature engineering, tabular preprocessing, and regression modeling on simulated industrial telemetry data.
 
