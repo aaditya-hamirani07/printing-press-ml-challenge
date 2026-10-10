@@ -1,6 +1,6 @@
 # 🖨️ Printing Press ML Challenge
 
-> **Industrial Yield Regression Challenge for CodeVerse 2.0**, integrated into a browser-based development platform with isolated Python code execution, automated validation, and real-time telemetry visualizer.
+> **Interactive Machine Learning Regression Challenge**, integrated into a locally runnable web-based coding workspace with Python execution, automated evaluation, and visualization support.
 
 [![Challenge Repository](https://img.shields.io/badge/Challenge_Repo-Printing__Press__ML-blue?logo=github)](https://github.com/aaditya-hamirani07/Printing_Press_ML)
 [![Platform Repository](https://img.shields.io/badge/Platform_Repo-Online__IDE-10b981?logo=github)](https://github.com/aaditya-hamirani07/Online_IDE)
@@ -29,9 +29,9 @@
 
 ## 🎯 Overview
 
-The **Printing Press ML Challenge** is an industrial machine learning regression competition developed for the **CodeVerse 2.0** technical event. The objective is to predict the total manufacturing volume (**`amount_printed`**) of industrial printing press runs based on machine operating telemetry, material characteristics, operational parameters, and environmental sensor readings.
+The **Printing Press ML Challenge** is an machine learning regression challenge built around a synthetic printing-press dataset. The objective is to predict the total production volume (**`amount_printed`**) from machine-related, material, operational, and environmental features.
 
-To give participants an instant, zero-setup competition environment, the challenge is hosted on **[Online_IDE](https://github.com/aaditya-hamirani07/Online_IDE)** — a full-stack web development platform providing browser-based Monaco code editing, sandboxed Python ML execution, automated grading, and live Matplotlib plot rendering.
+The challenge can be run through **[Online_IDE](https://github.com/aaditya-hamirani07/Online_IDE)**, a web-based coding workspace with Monaco editing, Python execution, automated evaluation, and Matplotlib plot rendering. It is locally runnable and is not presented here as a publicly hosted service.
 
 The core dataset generation engine, physics simulation design, and scoring modules are also available as a standalone repository at **[Printing_Press_ML](https://github.com/aaditya-hamirani07/Printing_Press_ML)**.
 
@@ -39,10 +39,10 @@ The core dataset generation engine, physics simulation design, and scoring modul
 
 ## ✨ Challenge Highlights
 
-- 🎯 **Supervised Industrial Regression**: Predict continuous production volume (`amount_printed`) from heterogeneous tabular telemetry.
+- 🎯 **Regression Prediction Challenge**: Predict the continuous target (`amount_printed`) from structured tabular features.
 - 📦 **8,500 Total Samples**: Partitioned into a public training set (7,000 samples) and a withheld evaluation test set (1,500 samples).
 - 🔬 **15 Input Features**: 8 numerical metrics and 7 categorical features modeling machinery, environmental sensors, materials, and shifts.
-- ⚙️ **Synthetic Physical Simulation**: Generated using a domain-driven physics model ([`generator.py`](challenges/printing-press/generator.py)) featuring nonlinear speed efficiency degradation, thermal wear, humidity-induced drag, machine fatigue, and 3 noise features.
+- ⚙️ **Synthetic Physical Simulation**: Generated using a synthetic domain-inspired model ([`generator.py`](challenges/printing-press/generator.py)) with nonlinear feature relationships and 3 noise features.
 - ⚡ **Automated In-IDE Grading**: Real-time evaluation pipeline via `POST /api/printing-press/run` that inspects the participant's `predictions` variable, validates schema and value bounds, and computes official score points.
 - 📊 **Telemetry Visualizer**: Automatic server-side capture of Matplotlib and Seaborn plots rendered directly in the web UI.
 
@@ -89,13 +89,13 @@ Contestants participate directly in the browser via the challenge workspace at `
 
 ## 📊 Dataset Specifications
 
-The dataset models industrial printing press operations with realistic nonlinear constraints and interaction dynamics:
+The synthetic dataset is designed to represent printing-press operations using nonlinear relationships and feature interactions; it is not real industrial production data:
 
 | Dataset | Rows | Columns | Target (`amount_printed`) | Status |
 |---|---:|---:|---|---|
 | [`data/train.csv`](challenges/printing-press/data/train.csv) | 7,000 | 17 (ID + 15 features + target) | Included | Public training set |
 | [`data/test.csv`](challenges/printing-press/data/test.csv) | 1,500 | 16 (ID + 15 features) | Withheld | Public evaluation features |
-| `data/answer_key.csv` | 1,500 | 2 (ID + target) | Included | Private evaluation ground truth (server-only) |
+| `data/answer_key.csv` | 1,500 | 2 (ID + target) | Server-side only | Private evaluation ground truth; not copied into contestant workspaces |
 
 ### Feature Summary
 
@@ -282,7 +282,7 @@ python challenges/printing-press/src/scorer.py submission.csv --answer-key chall
 
 ## 🔒 Security & Answer-Key Privacy
 
-- 🛡️ **Dataset Isolation**: [`server/workspace.js`](server/workspace.js) copies only `train.csv` and `test.csv` into contestant workspaces; `answer_key.csv` is never exposed or copied to client directories.
+- 🛡️ **Dataset Isolation**: [`server/workspace.js`](server/workspace.js) copies only `train.csv` and `test.csv` into contestant workspaces; `answer_key.csv` is used only by the server-side evaluator and is never copied into contestant workspaces or exposed to the client.
 - 🔐 **Server-Side Evaluation**: Test set prediction scoring executes exclusively on the backend server or via private storage in production.
 - ⏱️ **Resource Sandboxing**: Execution is bounded by a 5-minute timeout, CPU thread caps (`SANDBOX_THREAD_CAP=4`), and a 2MB output buffer limit.
 
