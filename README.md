@@ -31,7 +31,7 @@
 
 The **Printing Press ML Challenge** is an machine learning regression challenge built around a synthetic printing-press dataset. The objective is to predict the total production volume (**`amount_printed`**) from machine-related, material, operational, and environmental features.
 
-The challenge can be run through **[Online_IDE](https://github.com/aaditya-hamirani07/Online_IDE)**, a web-based coding workspace with Monaco editing, Python execution, automated evaluation, and Matplotlib plot rendering. It is locally runnable and is not presented here as a publicly hosted service.
+The challenge can be run through , a web-based coding workspace with Monaco editing, Python execution, automated evaluation, and Matplotlib plot rendering. It is locally runnable and is not presented here as a publicly hosted service.
 
 The core dataset generation engine, physics simulation design, and scoring modules are also available as a standalone repository at **[Printing_Press_ML](https://github.com/aaditya-hamirani07/Printing_Press_ML)**.
 
