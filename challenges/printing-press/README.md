@@ -1,6 +1,6 @@
 # Printing Press ML 
 
-A machine learning regression challenge developed for a college technical event, designed to evaluate feature engineering, tabular preprocessing, and regression modeling on simulated industrial telemetry data.
+A machine learning challenge developed for a college technical event, designed to evaluate feature engineering, tabular preprocessing, and regression modeling on simulated telemetry data.
 
 This challenge is hosted on [Online_IDE](https://github.com/aaditya-hamirani07/Online_IDE), a browser-based development environment with integrated code execution and automated grading.
 
